@@ -10,7 +10,7 @@
                     <div class="card-body p-5">
                         <div class="text-center mb-4">
                             <i class="fas fa-hotel fa-3x text-primary"></i>
-                            <h3 class="mt-3 fw-bold">Cuba Travel</h3>
+                            <h3 class="mt-3 fw-bold">Landing Hotel</h3>
                             <p class="text-muted">Inicia sesión para continuar</p>
                         </div>
 
