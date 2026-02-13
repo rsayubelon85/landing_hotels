@@ -12,8 +12,8 @@ class UserSeeder extends Seeder
     {
         User::create([
             'name' => 'Administrador',
-            'email' => 'admin@cubatravel.com',
-            'password' => Hash::make('admin123'),
+            'email' => 'admin@landinghotel.com',
+            'password' => Hash::make('TravelInertia*951'),
         ]);
     }
 }

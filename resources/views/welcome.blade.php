@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hotéis en Cuba - Cuba E-commerce 365')
+@section('title', 'Hoteles en Cuba - Landing Hotels')
 
 @php
     $header = $header ?? null;

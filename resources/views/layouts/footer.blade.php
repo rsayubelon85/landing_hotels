@@ -58,7 +58,7 @@
         <div class="row">
             <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
                 <p class="mb-0 small">
-                    &copy; {{ date('Y') }} Cuba Landing Hotels. Todos los derechos reservados.
+                    &copy; {{ date('Y') }} Landing Hotels. Todos los derechos reservados.
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">
