@@ -1,4 +1,3 @@
-{{-- resources/views/layouts/footer.blade.php --}}
 <footer class="bg-dark text-white py-4 mt-5">
     <div class="container">
         <div class="row">
@@ -6,7 +5,7 @@
                 <h5 class="fw-bold mb-3">
                     <i class="fas fa-hotel me-2"></i>Cuba Travel
                 </h5>
-                <p class="small text-muted">
+                <p class="small">
                     Descubre los mejores hoteles y destinos turísticos en Cuba.
                     Tu puerta de entrada al caribe cubano.
                 </p>
@@ -16,18 +15,18 @@
                 <h5 class="fw-bold mb-3">Enlaces Rápidos</h5>
                 <ul class="list-unstyled small">
                     <li class="mb-2">
-                        <a href="{{ route('home') }}" class="text-decoration-none text-muted hover-text-white">
+                        <a href="{{ route('home') }}" class="text-decoration-none hover-text-white">
                             <i class="fas fa-chevron-right me-2"></i>Inicio
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="#hotels" class="text-decoration-none text-muted hover-text-white">
+                        <a href="#hotels" class="text-decoration-none hover-text-white">
                             <i class="fas fa-chevron-right me-2"></i>Hoteles
                         </a>
                     </li>
                     @auth
                         <li class="mb-2">
-                            <a href="{{ route('admin.hotels.index') }}" class="text-decoration-none text-muted hover-text-white">
+                            <a href="{{ route('admin.hotels.index') }}" class="text-decoration-none hover-text-white">
                                 <i class="fas fa-chevron-right me-2"></i>Panel Administrativo
                             </a>
                         </li>
@@ -40,15 +39,15 @@
                 <ul class="list-unstyled small">
                     <li class="mb-2">
                         <i class="fas fa-envelope me-2 text-primary"></i>
-                        <span class="text-muted">info@cubatravel.com</span>
+                        <span>info@cubatravel.com</span>
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-phone me-2 text-primary"></i>
-                        <span class="text-muted">+53 7 123 4567</span>
+                        <span>+53 59925542</span>
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                        <span class="text-muted">La Habana, Cuba</span>
+                        <span>La Habana, Cuba</span>
                     </li>
                 </ul>
             </div>
@@ -58,8 +57,8 @@
 
         <div class="row">
             <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
-                <p class="mb-0 small text-muted">
-                    &copy; {{ date('Y') }} Cuba E-commerce 365. Todos los derechos reservados.
+                <p class="mb-0 small">
+                    &copy; {{ date('Y') }} Cuba Landing Hotels. Todos los derechos reservados.
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">

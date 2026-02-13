@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PromotionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\HotelController;
@@ -16,6 +17,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Gestión de Hoteles
     Route::resource('hotels', HotelController::class);
+
+    // Rutas de Promociones
+    Route::resource('promotions', PromotionController::class)->names('promotions');
 
     // Configuración del Header
     Route::get('header/edit', [HeaderConfigController::class, 'edit'])->name('header.edit');

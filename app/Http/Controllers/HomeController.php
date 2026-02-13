@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hotel;
 use App\Models\HeaderConfig;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,6 +12,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $header = HeaderConfig::where('is_active', true)->first();
+
+        // Obtener promociones activas y ordenadas
+        $promotions = Promotion::active()->ordered()->get();
 
         // Obtener término de búsqueda
         $search = $request->get('search', '');
@@ -31,12 +35,12 @@ class HomeController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Paginar resultados
-        $hotels = $query->paginate(10);
+        $hotels = $query->paginate(9);
 
         // Mantener el parámetro de búsqueda en la paginación
         $hotels->appends(['search' => $search]);
 
-        return view('welcome', compact('header', 'hotels'));
+        return view('welcome', compact('header', 'hotels','promotions'));
     }
 
     /**

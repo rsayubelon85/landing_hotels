@@ -184,7 +184,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230d6efd" fill-opacity="0.05" d="M0,128L48,144C96,160,192,192,288,186.7C384,181,480,139,576,138.7C672,139,768,181,864,197.3C960,213,1056,203,1152,176C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
             background-size: cover;
             opacity: 0.3;
         }
@@ -381,7 +380,7 @@
         </div>
     </section>
 
-    <!-- Promotions Section - Simple -->
+    <!-- Promotions Section - DINÁMICA -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="row justify-content-center">
@@ -392,41 +391,39 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-percent fa-2x text-primary"></i>
-                            </div>
-                            <h5 class="fw-bold mb-2">20% OFF</h5>
-                            <p class="text-muted small">Reserva con anticipación</p>
-                        </div>
-                    </div>
-                </div>
+                @forelse($promotions as $promotion)
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="{{ $promotion->icon }} {{ $promotion->icon_color }} fa-2x"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">{{ $promotion->title }}</h5>
+                                <p class="text-muted small">{{ $promotion->subtitle }}</p>
 
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-utensils fa-2x text-success"></i>
-                            </div>
-                            <h5 class="fw-bold mb-2">Todo Incluido</h5>
-                            <p class="text-muted small">Desayuno, almuerzo y cena</p>
-                        </div>
-                    </div>
-                </div>
+                                @if($promotion->badge_text)
+                                    <span class="badge {{ $promotion->badge_color }} mt-2">
+                                    {{ $promotion->badge_text }}
+                                </span>
+                                @endif
 
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-gift fa-2x text-warning"></i>
+                                @if($promotion->button_text && $promotion->button_url)
+                                    <div class="mt-3">
+                                        <a href="{{ $promotion->button_url }}" class="btn btn-sm btn-outline-primary">
+                                            {{ $promotion->button_text }}
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
-                            <h5 class="fw-bold mb-2">1 Noche Gratis</h5>
-                            <p class="text-muted small">Al reservar 5 noches</p>
                         </div>
                     </div>
-                </div>
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted mb-2">No hay promociones disponibles</h4>
+                        <p class="text-muted">Próximamente nuevas ofertas</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>

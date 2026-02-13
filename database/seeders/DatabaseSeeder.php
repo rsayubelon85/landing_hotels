@@ -14,12 +14,8 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // Crear usuario administrador
-        User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@cubatravel.com',
-            'password' => bcrypt('password123'),
-        ]);
+        // Ejecutar seeder de usuario
+        $this->call(UserSeeder::class);
 
         // Configuración del header
         HeaderConfig::create([
@@ -35,5 +31,8 @@ class DatabaseSeeder extends Seeder
 
         // Ejecutar seeder de hoteles
         $this->call(HotelSeeder::class);
+
+        // Ejecutar seeder de promociones
+        $this->call(PromotionSeeder::class);
     }
 }

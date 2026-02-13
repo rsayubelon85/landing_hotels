@@ -23,6 +23,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a class="dropdown-item" href="{{ route('admin.promotions.index') }}">
+                                    <i class="fas fa-sort-amount-desc me-2"></i>Administrar Promociones
+                                </a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item" href="{{ route('admin.header.edit') }}">
                                     <i class="fas fa-cog me-2"></i>Configuración
                                 </a>
