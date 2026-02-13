@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <h5 class="fw-bold mb-3">
-                    <i class="fas fa-hotel me-2"></i>Cuba Travel
+                    <i class="fas fa-hotel me-2"></i>Landing Hotel
                 </h5>
                 <p class="small">
                     Descubre los mejores hoteles y destinos turísticos en Cuba.
