@@ -58,11 +58,11 @@
                                 </button>
                             </div>
 
-                            <div class="text-center mt-3">
+{{--                            <div class="text-center mt-3">
                                 <a href="{{ route('register') }}" class="text-decoration-none">
                                     ¿No tienes cuenta? Regístrate
                                 </a>
-                            </div>
+                            </div>--}}
                         </form>
                     </div>
                 </div>
