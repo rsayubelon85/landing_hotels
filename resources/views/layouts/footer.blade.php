@@ -39,7 +39,7 @@
                 <ul class="list-unstyled small">
                     <li class="mb-2">
                         <i class="fas fa-envelope me-2 text-primary"></i>
-                        <span>info@cubatravel.com</span>
+                        <span>info@landinghotel.com</span>
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-phone me-2 text-primary"></i>
