@@ -175,12 +175,8 @@
                                             @if($hotel->image_path)
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">Imagen Actual:</label>
-                                                    <!-- Mostrar imagen actual -->
-                                                    <div class="mt-2">
-                                                        <label class="form-label">Imagen actual:</label>
-                                                        <div class="border rounded p-2 bg-light">
-                                                            <img src="{{ asset('storage/' . $hotel->image_path) }}" alt="{{ $hotel->image_path }}" class="img-fluid" style="max-height: 200px;">
-                                                        </div>
+                                                    <div class="border rounded p-2 bg-light mt-2">
+                                                        <img src="{{ asset('storage/' . $hotel->image_path) }}" alt="{{ $hotel->name }}" class="img-fluid" style="max-height: 200px;">
                                                     </div>
                                                 </div>
                                             @endif
@@ -227,14 +223,14 @@
 
                                                 @if(count($amenities) > 0)
                                                     @foreach($amenities as $index => $amenity)
-                                                        <div class="amenity-item mb-2 p-2 bg-light rounded" data-index="{{ $index }}">
+                                                        <div class="amenity-item mb-2 p-2 bg-light rounded border" data-index="{{ $index }}">
                                                             <div class="input-group">
-                                                            <span class="input-group-text bg-white border-end-0">
-                                                                <i class="fas fa-check-circle text-success"></i>
-                                                            </span>
+                                                                <span class="input-group-text bg-white">
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                </span>
                                                                 <input
                                                                     type="text"
-                                                                    class="form-control border-start-0 @error('amenities.' . $index) is-invalid @enderror"
+                                                                    class="form-control amenity-input @error('amenities.' . $index) is-invalid @enderror"
                                                                     name="amenities[]"
                                                                     value="{{ $amenity }}"
                                                                     placeholder="Ej: Piscina, WiFi, Restaurante..."
@@ -250,14 +246,14 @@
                                                         </div>
                                                     @endforeach
                                                 @else
-                                                    <div class="amenity-item mb-2 p-2 bg-light rounded" data-index="0">
+                                                    <div class="amenity-item mb-2 p-2 bg-light rounded border" data-index="0">
                                                         <div class="input-group">
-                                                        <span class="input-group-text bg-white border-end-0">
-                                                            <i class="fas fa-check-circle text-success"></i>
-                                                        </span>
+                                                            <span class="input-group-text bg-white">
+                                                                <i class="fas fa-check-circle text-success"></i>
+                                                            </span>
                                                             <input
                                                                 type="text"
-                                                                class="form-control border-start-0"
+                                                                class="form-control amenity-input"
                                                                 name="amenities[]"
                                                                 placeholder="Ej: Piscina, WiFi, Restaurante..."
                                                                 required
@@ -328,7 +324,6 @@
                                                         @error('property_number')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
-                                                        <small class="text-muted">Número de propiedad asignado por Cuba Travel</small>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -346,7 +341,6 @@
                                                         @error('refpoint')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
-                                                        <small class="text-muted">Ubicación o destino (se usará location si está vacío)</small>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -365,7 +359,6 @@
                                                         @error('iata_code')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
-                                                        <small class="text-muted">Código del aeropuerto más cercano (VRA = Varadero)</small>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -383,7 +376,6 @@
                                                         @error('booking_url')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
-                                                        <small class="text-muted">Dejar vacío para generar URL automáticamente</small>
                                                     </div>
                                                 </div>
 
@@ -419,50 +411,85 @@
     </div>
 @endsection
 
-@push('scripts')
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ Script de amenities cargado');
+            console.log('✅ Script de edit cargado');
 
-            // Contador de amenities
-            let amenityCounter = {{ count(old('amenities', $hotel->amenities ?? [])) }};
+            // ========== 1. TOGGLE BOOKING FIELDS ==========
+            const checkbox = document.getElementById('has_direct_booking');
+            const bookingFields = document.getElementById('booking-fields');
 
-            // 1. BOTÓN AGREGAR - Verificar que exista
-            const addButton = document.getElementById('add-amenity');
-            if (!addButton) {
-                console.error('❌ Botón #add-amenity no encontrado');
-                return;
+            if (checkbox && bookingFields) {
+                console.log('✅ Checkbox y booking fields encontrados');
+
+                function toggleBookingFields() {
+                    console.log('🔄 Checkbox state:', checkbox.checked);
+                    if (checkbox.checked) {
+                        bookingFields.style.display = 'block';
+                        bookingFields.style.opacity = '0';
+                        setTimeout(() => {
+                            bookingFields.style.transition = 'opacity 0.3s ease';
+                            bookingFields.style.opacity = '1';
+                        }, 10);
+                    } else {
+                        bookingFields.style.opacity = '0';
+                        setTimeout(() => {
+                            bookingFields.style.display = 'none';
+                        }, 300);
+                    }
+                }
+
+                checkbox.addEventListener('change', toggleBookingFields);
+                toggleBookingFields(); // Inicializar estado
+            } else {
+                console.error('❌ Checkbox o booking-fields no encontrados');
             }
 
-            addButton.addEventListener('click', function() {
-                console.log('➕ Agregando nuevo servicio...');
+            // ========== 2. MANEJO DE AMENITIES ==========
+            let amenityCounter = {{ count(old('amenities', $hotel->amenities ?? [])) }};
+            console.log('🔢 Contador inicial de amenities:', amenityCounter);
 
+            // Botón AGREGAR
+            const addButton = document.getElementById('add-amenity');
+            if (addButton) {
+                console.log('✅ Botón de agregar encontrado');
+                addButton.addEventListener('click', function() {
+                    console.log('➕ Botón agregar clickeado');
+                    addAmenity();
+                });
+            } else {
+                console.error('❌ Botón #add-amenity no encontrado');
+            }
+
+            // Función para agregar amenity
+            function addAmenity(value = '') {
                 const container = document.getElementById('amenities-container');
                 if (!container) {
-                    console.error('❌ Contenedor no encontrado');
+                    console.error('❌ Contenedor #amenities-container no encontrado');
                     return;
                 }
 
-                // Crear nuevo elemento
                 const div = document.createElement('div');
                 div.className = 'amenity-item mb-2 p-2 bg-light rounded border';
                 div.setAttribute('data-index', amenityCounter);
-
-                // HTML limpio (sin saltos de línea problemáticos)
                 div.innerHTML = `
-            <div class="input-group">
-                <span class="input-group-text bg-white">
-                    <i class="fas fa-check-circle text-success"></i>
-                </span>
-                <input type="text" class="form-control amenity-input"
-                    name="amenities[]"
-                    placeholder="Ej: Piscina, WiFi, Restaurante..."
-                    required>
-                <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-check-circle text-success"></i>
+                        </span>
+                        <input
+                            type="text"
+                            class="form-control amenity-input"
+                            name="amenities[]"
+                            value="${value.replace(/"/g, '&quot;')}"
+                            placeholder="Ej: Piscina, WiFi, Restaurante..."
+                            required
+                        >
+                        <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
 
                 container.appendChild(div);
                 amenityCounter++;
@@ -474,52 +501,40 @@
                 }
 
                 console.log(`✅ Servicio #${amenityCounter - 1} agregado`);
-            });
+            }
 
-            // 2. ELIMINAR SERVICIO - Evento delegado (funciona con elementos dinámicos)
+            // Evento delegado para ELIMINAR (funciona con elementos dinámicos)
             document.addEventListener('click', function(e) {
-                const removeBtn = e.target.closest('.remove-amenity');
-                if (!removeBtn) return;
+                if (e.target.closest('.remove-amenity')) {
+                    console.log('🗑️ Botón eliminar clickeado');
+                    const button = e.target.closest('.remove-amenity');
+                    const amenityItem = button.closest('.amenity-item');
 
-                const amenityItem = removeBtn.closest('.amenity-item');
-                if (!amenityItem) return;
+                    if (amenityItem) {
+                        const items = document.querySelectorAll('.amenity-item');
+                        console.log('📊 Total de items:', items.length);
 
-                const allItems = document.querySelectorAll('.amenity-item');
-
-                if (allItems.length === 1) {
-                    // Solo limpiar si es el único
-                    const input = amenityItem.querySelector('.amenity-input');
-                    if (input) {
-                        input.value = '';
-                        alert('⚠️ Debes tener al menos un servicio. El campo ha sido limpiado.');
-                    }
-                } else {
-                    // Eliminar con confirmación
-                    if (confirm('🗑️ ¿Estás seguro de eliminar este servicio?')) {
-                        amenityItem.remove();
-                        console.log('✅ Servicio eliminado');
+                        if (items.length === 1) {
+                            // Solo limpiar si es el único
+                            const input = amenityItem.querySelector('.amenity-input');
+                            if (input) {
+                                input.value = '';
+                                alert('⚠️ Debes tener al menos un servicio. El campo ha sido limpiado.');
+                            }
+                        } else {
+                            // Eliminar con confirmación
+                            if (confirm('¿Eliminar este servicio?')) {
+                                amenityItem.remove();
+                                console.log('✅ Servicio eliminado');
+                            }
+                        }
                     }
                 }
             });
 
-            // 3. VALIDACIÓN ANTES DE ENVIAR
-            const form = document.querySelector('form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    const amenities = document.querySelectorAll('.amenity-input');
-                    const hasValid = Array.from(amenities).some(input => input.value.trim().length > 0);
-
-                    if (!hasValid) {
-                        e.preventDefault();
-                        alert('❌ ¡Debes agregar al menos un servicio válido!');
-                        amenities[0]?.focus();
-                        return false;
-                    }
-                });
-            }
+            console.log('✅ Scripts inicializados correctamente');
         });
     </script>
-@endpush
 
 @push('styles')
     <style>

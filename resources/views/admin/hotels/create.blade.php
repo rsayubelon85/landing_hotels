@@ -2,6 +2,30 @@
 
 @section('title', 'Crear Nuevo Hotel')
 
+@push('styles')
+    <style>
+        .amenity-item {
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+        }
+
+        .amenity-item:hover {
+            border-color: #0d6efd;
+            background-color: #e7f3ff !important;
+        }
+
+        .input-group-text {
+            min-width: 40px;
+            justify-content: center;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="container py-4">
         <div class="row justify-content-center">
@@ -191,17 +215,17 @@
                                             <div id="amenities-container">
                                                 @if(old('amenities'))
                                                     @foreach(old('amenities') as $index => $amenity)
-                                                        <div class="amenity-item mb-2 p-2 bg-light rounded" data-index="{{ $index }}">
+                                                        <div class="amenity-item mb-2 p-2 bg-light rounded border" data-index="{{ $index }}">
                                                             <div class="input-group">
-                                                            <span class="input-group-text bg-white border-end-0">
-                                                                <i class="fas fa-check-circle text-success"></i>
-                                                            </span>
+                                                                <span class="input-group-text bg-white">
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                </span>
                                                                 <input
                                                                     type="text"
-                                                                    class="form-control border-start-0 @error('amenities.' . $index) is-invalid @enderror"
+                                                                    class="form-control amenity-input @error('amenities.' . $index) is-invalid @enderror"
                                                                     name="amenities[]"
                                                                     value="{{ $amenity }}"
-                                                                    placeholder="Ej: Piscina, WiFi, Restaurante, Aire Acondicionado..."
+                                                                    placeholder="Ej: Piscina, WiFi, Restaurante..."
                                                                     required
                                                                 >
                                                                 <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
@@ -214,16 +238,16 @@
                                                         </div>
                                                     @endforeach
                                                 @else
-                                                    <div class="amenity-item mb-2 p-2 bg-light rounded" data-index="0">
+                                                    <div class="amenity-item mb-2 p-2 bg-light rounded border" data-index="0">
                                                         <div class="input-group">
-                                                        <span class="input-group-text bg-white border-end-0">
-                                                            <i class="fas fa-check-circle text-success"></i>
-                                                        </span>
+                                                            <span class="input-group-text bg-white">
+                                                                <i class="fas fa-check-circle text-success"></i>
+                                                            </span>
                                                             <input
                                                                 type="text"
-                                                                class="form-control border-start-0"
+                                                                class="form-control amenity-input"
                                                                 name="amenities[]"
-                                                                placeholder="Ej: Piscina, WiFi, Restaurante, Aire Acondicionado..."
+                                                                placeholder="Ej: Piscina, WiFi, Restaurante..."
                                                                 required
                                                             >
                                                             <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
@@ -240,119 +264,108 @@
 
                                             <div class="alert alert-info mt-3 mb-0">
                                                 <i class="fas fa-lightbulb me-2"></i>
-                                                <strong>Sugerencias de amenities:</strong>
-                                                Piscina, WiFi Gratuito, Restaurante, Bar, Estacionamiento,
-                                                Aire Acondicionado, Room Service, Gimnasio, Spa, Playa Privada
+                                                <strong>Sugerencias:</strong> Piscina, WiFi, Restaurante, Bar, Estacionamiento, Aire Acondicionado
                                             </div>
                                         </div>
-                                        <!-- Opción de Reserva Directa -->
-                                        <div class="row mb-4">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-header bg-light">
-                                                        <h6 class="mb-0 fw-bold">
-                                                            <i class="fas fa-ticket-alt text-primary me-2"></i>Reserva Directa
-                                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Opción de Reserva Directa -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-light">
+                                            <h6 class="mb-0 fw-bold">
+                                                <i class="fas fa-ticket-alt text-primary me-2"></i>Reserva Directa
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3 form-check">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input"
+                                                    id="has_direct_booking"
+                                                    name="has_direct_booking"
+                                                    value="1"
+                                                    {{ old('has_direct_booking') ? 'checked' : '' }}
+                                                >
+                                                <label class="form-check-label fw-bold" for="has_direct_booking">
+                                                    <i class="fas fa-toggle-on text-success me-2"></i>Este hotel tiene reserva directa
+                                                </label>
+                                                <br>
+                                                <small class="text-muted">Se mostrará un botón de reserva en la landing page</small>
+                                            </div>
+
+                                            <div id="booking-fields" style="{{ old('has_direct_booking') ? '' : 'display:none;' }}">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="property_number" class="form-label fw-bold">
+                                                            <i class="fas fa-hashtag text-primary me-2"></i>Número de Propiedad *
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control @error('property_number') is-invalid @enderror"
+                                                            id="property_number"
+                                                            name="property_number"
+                                                            value="{{ old('property_number') }}"
+                                                            placeholder="Ej: HT 52896"
+                                                        >
+                                                        @error('property_number')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
-                                                    <div class="card-body">
-                                                        <div class="mb-3 form-check">
-                                                            <input
-                                                                type="checkbox"
-                                                                class="form-check-input"
-                                                                id="has_direct_booking"
-                                                                name="has_direct_booking"
-                                                                value="1"
-                                                                {{ old('has_direct_booking') ? 'checked' : '' }}
-                                                            >
-                                                            <label class="form-check-label fw-bold" for="has_direct_booking">
-                                                                <i class="fas fa-toggle-on text-success me-2"></i>Este hotel tiene reserva directa
-                                                            </label>
-                                                            <br>
-                                                            <small class="text-muted">Al activar esta opción, se mostrará un botón de reserva en la landing page</small>
-                                                        </div>
 
-                                                        <div id="booking-fields" style="{{ old('has_direct_booking') ? '' : 'display:none;' }}">
-                                                            <div class="row">
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="property_number" class="form-label fw-bold">
-                                                                        <i class="fas fa-hashtag text-primary me-2"></i>Número de Propiedad *
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control @error('property_number') is-invalid @enderror"
-                                                                        id="property_number"
-                                                                        name="property_number"
-                                                                        value="{{ old('property_number') }}"
-                                                                        placeholder="Ej: HT 52896"
-                                                                    >
-                                                                    @error('property_number')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                    @enderror
-                                                                    <small class="text-muted">Número de propiedad asignado por Cuba Travel</small>
-                                                                </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="refpoint" class="form-label fw-bold">
+                                                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Punto de Referencia
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control @error('refpoint') is-invalid @enderror"
+                                                            id="refpoint"
+                                                            name="refpoint"
+                                                            value="{{ old('refpoint') }}"
+                                                            placeholder="Ej: Varadero"
+                                                        >
+                                                        @error('refpoint')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
 
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="refpoint" class="form-label fw-bold">
-                                                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>Punto de Referencia
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control @error('refpoint') is-invalid @enderror"
-                                                                        id="refpoint"
-                                                                        name="refpoint"
-                                                                        value="{{ old('refpoint') }}"
-                                                                        placeholder="Ej: Varadero"
-                                                                    >
-                                                                    @error('refpoint')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                    @enderror
-                                                                    <small class="text-muted">Ubicación o destino (se usará location si está vacío)</small>
-                                                                </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="iata_code" class="form-label fw-bold">
+                                                            <i class="fas fa-plane text-primary me-2"></i>Código IATA
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control @error('iata_code') is-invalid @enderror"
+                                                            id="iata_code"
+                                                            name="iata_code"
+                                                            value="{{ old('iata_code', 'VRA') }}"
+                                                            placeholder="Ej: VRA"
+                                                            maxlength="3"
+                                                        >
+                                                        @error('iata_code')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
 
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="iata_code" class="form-label fw-bold">
-                                                                        <i class="fas fa-plane text-primary me-2"></i>Código IATA del Aeropuerto
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control @error('iata_code') is-invalid @enderror"
-                                                                        id="iata_code"
-                                                                        name="iata_code"
-                                                                        value="{{ old('iata_code', 'VRA') }}"
-                                                                        placeholder="Ej: VRA"
-                                                                        maxlength="3"
-                                                                    >
-                                                                    @error('iata_code')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                    @enderror
-                                                                    <small class="text-muted">Código del aeropuerto más cercano (VRA = Varadero)</small>
-                                                                </div>
-
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label for="booking_url" class="form-label fw-bold">
-                                                                        <i class="fas fa-link text-primary me-2"></i>URL Personalizada (Opcional)
-                                                                    </label>
-                                                                    <input
-                                                                        type="url"
-                                                                        class="form-control @error('booking_url') is-invalid @enderror"
-                                                                        id="booking_url"
-                                                                        name="booking_url"
-                                                                        value="{{ old('booking_url') }}"
-                                                                        placeholder="https://www.cuba.travel/..."
-                                                                    >
-                                                                    @error('booking_url')
-                                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                                    @enderror
-                                                                    <small class="text-muted">Dejar vacío para generar URL automáticamente</small>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="alert alert-info">
-                                                                <i class="fas fa-info-circle me-2"></i>
-                                                                <strong>Nota:</strong> Si no proporcionas una URL personalizada, se generará automáticamente
-                                                                usando los parámetros de reserva estándar (2 adultos, 1 habitación, fechas futuras).
-                                                            </div>
-                                                        </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="booking_url" class="form-label fw-bold">
+                                                            <i class="fas fa-link text-primary me-2"></i>URL Personalizada
+                                                        </label>
+                                                        <input
+                                                            type="url"
+                                                            class="form-control @error('booking_url') is-invalid @enderror"
+                                                            id="booking_url"
+                                                            name="booking_url"
+                                                            value="{{ old('booking_url') }}"
+                                                            placeholder="https://ejemplo.com"
+                                                        >
+                                                        @error('booking_url')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,132 +395,95 @@
     </div>
 @endsection
 
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ Script cargado');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('✅ DOM cargado - Inicializando scripts...');
 
-            // Contador para nuevos amenities
-            let amenityCounter = {{ old('amenities') ? count(old('amenities')) : 1 }};
+        // ========== 1. TOGGLE BOOKING FIELDS ==========
+        const checkbox = document.getElementById('has_direct_booking');
+        const bookingFields = document.getElementById('booking-fields');
 
-            // 1. BOTÓN AGREGAR - CORREGIDO: ID correcto es 'add-amenity-btn'
-            const addButton = document.getElementById('add-amenity-btn');
-            if (addButton) {
-                addButton.addEventListener('click', function() {
-                    console.log('➕ Agregando nuevo servicio...');
-                    addAmenity();
-                });
-            } else {
-                console.error('❌ Botón #add-amenity-btn no encontrado');
+        if (checkbox && bookingFields) {
+            console.log('✅ Checkbox y booking fields encontrados');
+
+            function toggleBookingFields() {
+                if (checkbox.checked) {
+                    bookingFields.style.display = 'block';
+                    bookingFields.style.opacity = '0';
+                    setTimeout(() => {
+                        bookingFields.style.transition = 'opacity 0.3s ease';
+                        bookingFields.style.opacity = '1';
+                    }, 10);
+                } else {
+                    bookingFields.style.opacity = '0';
+                    setTimeout(() => {
+                        bookingFields.style.display = 'none';
+                    }, 300);
+                }
             }
 
-            // 2. FUNCIÓN PARA AGREGAR AMENITY
-            function addAmenity(value = '') {
-                const container = document.getElementById('amenities-container');
-                if (!container) {
-                    console.error('❌ Contenedor #amenities-container no encontrado');
-                    return;
-                }
+            checkbox.addEventListener('change', toggleBookingFields);
+            toggleBookingFields();
+        }
 
-                const div = document.createElement('div');
-                div.className = 'amenity-item mb-2 p-2 bg-light rounded border';
-                div.setAttribute('data-index', amenityCounter);
-                div.innerHTML = `
-            <div class="input-group">
-                <span class="input-group-text bg-white">
-                    <i class="fas fa-check-circle text-success"></i>
-                </span>
-                <input
-                    type="text"
-                    class="form-control amenity-input"
-                    name="amenities[]"
-                    value="${value.replace(/"/g, '&quot;')}"
-                    placeholder="Ej: Piscina, WiFi, Restaurante..."
-                    required
-                >
-                <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
+        // ========== 2. MANEJO DE AMENITIES ==========
+        let amenityCounter = {{ old('amenities') ? count(old('amenities')) : 1 }};
+        console.log('🔢 Contador inicial de amenities:', amenityCounter);
 
-                container.appendChild(div);
-                amenityCounter++;
-
-                // Enfocar el nuevo input
-                const input = div.querySelector('input');
-                if (input) {
-                    setTimeout(() => input.focus(), 100);
-                }
-
-                console.log(`✅ Servicio #${amenityCounter - 1} agregado`);
-            }
-
-            // 3. EVENTO DELEGADO PARA ELIMINAR (funciona con elementos dinámicos)
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-amenity')) {
-                    const button = e.target.closest('.remove-amenity');
-                    const amenityItem = button.closest('.amenity-item');
-
-                    if (amenityItem) {
-                        const items = document.querySelectorAll('.amenity-item');
-
-                        if (items.length === 1) {
-                            // Solo limpiar si es el único
-                            const input = amenityItem.querySelector('.amenity-input');
-                            if (input) {
-                                input.value = '';
-                                alert('⚠️ Debes tener al menos un servicio. El campo ha sido limpiado.');
-                            }
-                        } else {
-                            // Eliminar con confirmación
-                            if (confirm('¿Eliminar este servicio?')) {
-                                amenityItem.remove();
-                                console.log('🗑️ Servicio eliminado');
-                            }
-                        }
-                    }
-                }
+        const addButton = document.getElementById('add-amenity');
+        if (addButton) {
+            addButton.addEventListener('click', function() {
+                addAmenity();
             });
+        }
 
-            // 4. VALIDACIÓN ANTES DE ENVIAR
-            const form = document.getElementById('hotel-form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    const amenities = document.querySelectorAll('.amenity-input');
-                    let hasValid = Array.from(amenities).some(input => input.value.trim().length > 0);
+        function addAmenity(value = '') {
+            const container = document.getElementById('amenities-container');
+            if (!container) return;
 
-                    if (!hasValid) {
-                        e.preventDefault();
-                        alert('❌ ¡Debes agregar al menos un servicio válido!');
-                        amenities[0]?.focus();
-                    }
-                });
+            const div = document.createElement('div');
+            div.className = 'amenity-item mb-2 p-2 bg-light rounded border';
+            div.setAttribute('data-index', amenityCounter);
+            div.innerHTML = `
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="fas fa-check-circle text-success"></i>
+                    </span>
+                    <input
+                        type="text"
+                        class="form-control amenity-input"
+                        name="amenities[]"
+                        value="${value.replace(/"/g, '&quot;')}"
+                        placeholder="Ej: Piscina, WiFi..."
+                        required
+                    >
+                    <button type="button" class="btn btn-danger btn-sm remove-amenity" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(div);
+            amenityCounter++;
+            setTimeout(() => div.querySelector('input').focus(), 100);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-amenity')) {
+                const button = e.target.closest('.remove-amenity');
+                const amenityItem = button.closest('.amenity-item');
+                if (!amenityItem) return;
+
+                const items = document.querySelectorAll('.amenity-item');
+                if (items.length === 1) {
+                    amenityItem.querySelector('.amenity-input').value = '';
+                    alert('⚠️ Debes tener al menos un servicio');
+                } else if (confirm('¿Eliminar este servicio?')) {
+                    amenityItem.remove();
+                }
             }
         });
-    </script>
-@endpush
+    });
+</script>
 
-@push('styles')
-    <style>
-        .amenity-item {
-            transition: all 0.3s ease;
-            border: 1px solid #dee2e6;
-        }
 
-        .amenity-item:hover {
-            border-color: #0d6efd;
-            background-color: #e7f3ff !important;
-        }
-
-        .input-group-text {
-            min-width: 40px;
-            justify-content: center;
-        }
-
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.875rem;
-        }
-    </style>
-@endpush
