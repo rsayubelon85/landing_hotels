@@ -137,10 +137,6 @@ class HotelController extends Controller
             'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_active' => 'boolean',
             'has_direct_booking' => 'boolean',
-            'property_number' => 'required_if:has_direct_booking,true|string|max:100',
-            'refpoint' => 'nullable|string|max:255',
-            'iata_code' => 'nullable|string|max:10',
-            'booking_url' => 'nullable|url|max:500'
 
         ], [
             'amenities.required' => 'Debes agregar al menos un servicio.',
@@ -158,6 +154,13 @@ class HotelController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
+        }
+
+        if ($request->has_direct_booking) {
+            $validator['property_number'] = 'required|string|max:50';
+            $validator['refpoint'] = 'nullable|string|max:100';
+            $validator['iata_code'] = 'nullable|string|max:3';
+            $validator['booking_url'] = 'nullable|url';
         }
 
         try {
