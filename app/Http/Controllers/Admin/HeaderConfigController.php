@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HeaderConfig;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HeaderConfigController extends Controller
 {
@@ -38,7 +39,7 @@ class HeaderConfigController extends Controller
 
         if ($request->hasFile('background_image')) {
             if ($config->background_image) {
-                \Storage::disk('public')->delete($config->background_image);
+                Storage::disk('public')->delete($config->background_image);
             }
 
             $path = $request->file('background_image')->store('headers', 'public');
