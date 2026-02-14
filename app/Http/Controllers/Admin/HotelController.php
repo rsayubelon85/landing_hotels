@@ -40,8 +40,8 @@ class HotelController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
+        // Reglas base
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0|max:999999.99',
@@ -49,27 +49,34 @@ class HotelController extends Controller
             'location' => 'nullable|string|max:255',
             'amenities' => 'required|array|min:1',
             'amenities.*' => 'required|string|max:255|distinct',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_active' => 'boolean',
             'has_direct_booking' => 'boolean',
-            // Reglas condicionales para reserva directa
-            'property_number' => 'required_if:has_direct_booking,true|string|max:50',
-            'refpoint' => 'nullable_if:has_direct_booking,false|string|max:100',
-            'iata_code' => 'nullable_if:has_direct_booking,false|string|max:3',
-            'booking_url' => 'nullable_if:has_direct_booking,false|url',
-        ], [
+        ];
+
+        $messages = [
             'amenities.required' => 'Debes agregar al menos un servicio.',
             'amenities.min' => 'Debes agregar al menos un servicio.',
             'amenities.*.required' => 'El servicio no puede estar vacío.',
             'amenities.*.distinct' => 'No puedes agregar servicios duplicados.',
-            'property_number.required_if' => 'El número de propiedad es obligatorio para reservas directas.',
             'name.required' => 'El nombre del hotel es obligatorio.',
             'price.required' => 'El precio es obligatorio.',
             'price.min' => 'El precio no puede ser negativo.',
             'image.max' => 'La imagen no debe superar los 2MB.',
             'image.image' => 'El archivo debe ser una imagen válida.'
-        ]);
+        ];
 
+        // Reglas condicionales si tiene reserva directa
+        if ($request->has_direct_booking) {
+            $rules['property_number'] = 'required|string|max:50';
+            $rules['refpoint'] = 'nullable|string|max:100';
+            $rules['iata_code'] = 'nullable|string|max:3';
+            $rules['booking_url'] = 'nullable|url';
+
+            $messages['property_number.required'] = 'El número de propiedad es obligatorio para reservas directas.';
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -123,8 +130,8 @@ class HotelController extends Controller
      */
     public function update(Request $request, Hotel $hotel)
     {
-        // Validación personalizada
-        $validator = Validator::make($request->all(), [
+        // Reglas base
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0|max:999999.99',
@@ -132,16 +139,12 @@ class HotelController extends Controller
             'location' => 'nullable|string|max:255',
             'amenities' => 'required|array|min:1',
             'amenities.*' => 'required|string|max:255|distinct',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'is_active' => 'boolean',
             'has_direct_booking' => 'boolean',
-            // Reglas condicionales para reserva directa
-            'property_number' => 'required_if:has_direct_booking,true|string|max:50',
-            'refpoint' => 'nullable_if:has_direct_booking,false|string|max:100',
-            'iata_code' => 'nullable_if:has_direct_booking,false|string|max:3',
-            'booking_url' => 'nullable_if:has_direct_booking,false|url',
+        ];
 
-        ], [
+        $messages = [
             'amenities.required' => 'Debes agregar al menos un servicio.',
             'amenities.min' => 'Debes agregar al menos un servicio.',
             'amenities.*.required' => 'El servicio no puede estar vacío.',
@@ -151,7 +154,19 @@ class HotelController extends Controller
             'price.min' => 'El precio no puede ser negativo.',
             'image.max' => 'La imagen no debe superar los 2MB.',
             'image.image' => 'El archivo debe ser una imagen válida.'
-        ]);
+        ];
+
+        // Reglas condicionales si tiene reserva directa
+        if ($request->has_direct_booking) {
+            $rules['property_number'] = 'required|string|max:50';
+            $rules['refpoint'] = 'nullable|string|max:100';
+            $rules['iata_code'] = 'nullable|string|max:3';
+            $rules['booking_url'] = 'nullable|url';
+
+            $messages['property_number.required'] = 'El número de propiedad es obligatorio para reservas directas.';
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return redirect()->back()
