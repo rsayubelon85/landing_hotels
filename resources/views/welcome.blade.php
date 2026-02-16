@@ -8,6 +8,32 @@
 
 @section('styles')
     <style>
+        /* ===== RESET Y BASE ===== */
+        .search-form .form-control {
+            border: none;
+            border-left: 1px solid #dee2e6;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            height: 100%;
+            color: #212529; /* Texto oscuro legible */
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .search-form .form-control::placeholder {
+            color: #6c757d;
+            opacity: 1;
+            font-weight: 400;
+        }
+
+        .search-form .form-control:focus {
+            outline: none;
+            background-color: #fafbfc;
+            border-left-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* ===== HERO SECTION ===== */
         .hero-section {
             background-size: cover;
             background-position: center;
@@ -30,6 +56,7 @@
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
         }
 
+        /* ===== HOTEL CARDS ===== */
         .hotel-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -42,6 +69,7 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
+        /* ===== PROMOTIONS ===== */
         /* Gradient Background for Promotions */
         .bg-gradient-promo {
             background: linear-gradient(135deg, #0d6efd 0%, #0d6efd 100%);
@@ -138,7 +166,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* CTA Box */
+        /* ===== CTA BOX ===== */
         .cta-box {
             background: rgba(255, 255, 255, 0.98);
             border: 3px solid rgba(255, 255, 255, 0.3);
@@ -170,7 +198,7 @@
             background: linear-gradient(135deg, #5568d3 0%, #653f8a 100%);
         }
 
-        /* Search Section - SIMPLE */
+        /* ===== SEARCH SECTION ===== */
         .search-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             padding: 2.5rem 0;
@@ -242,19 +270,6 @@
             font-size: 1.1rem;
         }
 
-        .search-form .form-control {
-            border: none;
-            border-left: 1px solid #dee2e6;
-            padding: 1rem 1.2rem;
-            font-size: 1rem;
-            height: 100%;
-        }
-
-        .search-form .form-control:focus {
-            box-shadow: none;
-            border-color: transparent;
-        }
-
         .search-form .btn {
             border: none;
             padding: 1rem 1.8rem;
@@ -274,7 +289,7 @@
             box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
         }
 
-        /* Responsive */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .search-section {
                 padding: 1.5rem 0;
@@ -324,7 +339,8 @@
                 margin-bottom: 0;
             }
         }
-        /* Botón de Reserva */
+
+        /* ===== BOTONES DE RESERVA ===== */
         .btn-success {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             border: none;
@@ -342,7 +358,7 @@
             font-size: 1.1rem;
         }
 
-        /* Badge de Reserva */
+        /* ===== BADGE DE RESERVA ===== */
         .badge-reservation {
             position: absolute;
             top: 10px;
@@ -355,7 +371,7 @@
             box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
         }
 
-        /* Efecto hover en card con reserva */
+        /* ===== EFECTO HOVER EN CARD CON RESERVA ===== */
         .hotel-card.has-reservation:hover {
             border-top: 4px solid #28a745;
         }
@@ -448,7 +464,7 @@
                             class="form-control"
                             placeholder="Ej: Hotel Nacional, Varadero..."
                             value="{{ request('search') }}"
-                            autocomplete="off"
+                            autocomplete="on"
                         >
                         <button class="btn btn-primary" type="submit">
                             <i class="fas fa-search me-1"></i>Buscar
