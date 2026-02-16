@@ -5,10 +5,10 @@ region: us-east-1
 
 # 🗂️ Directorios persistentes entre deploys
 mounts:
-  - path: /storage/app/public
+  - path: storage/app/public
     size: 10G
     persistent: true
-  - path: /storage/logs
+  - path: storage/logs
     size: 2G
     persistent: true
 
